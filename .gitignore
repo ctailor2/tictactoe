@@ -1,0 +1,8 @@
+# intellij files
+.idea
+tictactoe.iml
+
+# build output
+.gradle
+out
+
