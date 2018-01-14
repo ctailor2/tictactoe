@@ -16,11 +16,11 @@ class Board {
         this.printStream = printStream;
     }
 
-    void draw() {
+    void inspect() {
         printStream.println(grid);
     }
 
-    void mark(String move) {
-        grid = grid.replace(move, "X");
+    void mark(String location) {
+        grid = grid.replace(location, "X");
     }
 }

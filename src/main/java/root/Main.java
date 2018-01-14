@@ -7,7 +7,8 @@ public class Main {
         PrintStream standardOutput = System.out;
         InputStream standardInput = System.in;
         Board board = new Board(standardOutput);
-        Player player = new Player(standardOutput, new BufferedReader(new InputStreamReader(standardInput)));
-        new Game(board, player).start();
+        Player playerOne = new Player(standardOutput, new BufferedReader(new InputStreamReader(standardInput)));
+        Player playerTwo = new Player(standardOutput, new BufferedReader(new InputStreamReader(standardInput)));
+        new Game(board, playerOne, playerTwo).start();
     }
 }

@@ -2,17 +2,17 @@ package root;
 
 class Game {
     private final Board board;
-    private final Player player;
+    private final Player playerOne;
+    private final Player playerTwo;
 
-    Game(Board board, Player player) {
+    Game(Board board, Player playerOne, Player playerTwo) {
         this.board = board;
-        this.player = player;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
     }
 
     void start() {
-        board.draw();
-        String move = player.move();
-        board.mark(move);
-        board.draw();
+        playerOne.takeTurn(board);
+        playerTwo.takeTurn(board);
     }
 }

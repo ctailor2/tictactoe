@@ -9,36 +9,28 @@ public class GameTest {
 
     private Game game;
     private Board board;
-    private Player player;
+    private Player playerOne;
+    private Player playerTwo;
 
     @Before
     public void setUp() throws Exception {
         board = mock(Board.class);
-        player = mock(Player.class);
-        game = new Game(board, player);
+        playerOne = mock(Player.class);
+        playerTwo = mock(Player.class);
+        game = new Game(board, playerOne, playerTwo);
     }
 
     @Test
-    public void drawsTheBoardTwiceWhenStarted() {
+    public void playerOneTakesTheirTurnWithTheBoardWhenStarted() {
         game.start();
 
-        verify(board, times(2)).draw();
+        verify(playerOne).takeTurn(board);
     }
 
     @Test
-    public void tellsPlayerOneToMoveWhenStarted() {
+    public void playerTwoTakesTheirTurnWithTheBoardWhenStarted() {
         game.start();
 
-        verify(player).move();
-    }
-
-    @Test
-    public void marksTheBoardWithPlayerOneMoveWhenStarted() {
-        String playerOneMove = "someMove";
-        when(player.move()).thenReturn(playerOneMove);
-        
-        game.start();
-        
-        verify(board).mark(playerOneMove);
+        verify(playerTwo).takeTurn(board);
     }
 }

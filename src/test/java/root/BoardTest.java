@@ -20,8 +20,8 @@ public class BoardTest {
     }
 
     @Test
-    public void outputsA3x3GridWhenDrawn() {
-        board.draw();
+    public void outputsItsGridWhenInspected() {
+        board.inspect();
 
         assertThat(outputStream.toString()).isEqualTo("" +
             "1|2|3\n" +
@@ -35,7 +35,7 @@ public class BoardTest {
     public void replacesTheSelectedLocationWithAnXWhenMarked() {
         board.mark("4");
 
-        board.draw();
+        board.inspect();
         assertThat(outputStream.toString()).isEqualTo("" +
             "1|2|3\n" +
             "-----\n" +

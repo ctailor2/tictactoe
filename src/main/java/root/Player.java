@@ -14,12 +14,13 @@ class Player {
         this.bufferedReader = bufferedReader;
     }
 
-    String move() {
+    void takeTurn(Board board) {
+        board.inspect();
         printStream.print("Enter a number indicating where you want to mark the board: ");
         try {
-            return bufferedReader.readLine();
+            board.mark(bufferedReader.readLine());
         } catch (IOException e) {
-            return PASS_MOVE;
+            board.mark(PASS_MOVE);
         }
     }
 }

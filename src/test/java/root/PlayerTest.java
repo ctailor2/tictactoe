@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class PlayerTest {
 
@@ -13,6 +15,7 @@ public class PlayerTest {
     private ByteArrayOutputStream outputStream;
     private String selectedMove;
     private BufferedReader bufferedReader;
+    private Board board;
 
     @Before
     public void setUp() throws Exception {
@@ -23,28 +26,36 @@ public class PlayerTest {
         player = new Player(
             new PrintStream(outputStream),
             bufferedReader);
+        board = mock(Board.class);
     }
 
     @Test
-    public void promptsForANumberOnMove() {
-        player.move();
+    public void inspectsTheBoard_whenTakingATurn() {
+        player.takeTurn(board);
+
+        verify(board).inspect();
+    }
+
+    @Test
+    public void promptsForAMove_whenTakingATurn() {
+        player.takeTurn(board);
 
         assertThat(outputStream.toString()).isEqualTo("Enter a number indicating where you want to mark the board: ");
     }
 
     @Test
-    public void capturesTheSelectedMove() throws IOException {
-        String move = player.move();
+    public void marksTheBoard_withTheSelectedMove_whenTakingATurn() throws IOException {
+        player.takeTurn(board);
 
-        assertThat(move).isEqualTo(selectedMove);
+        verify(board).mark(selectedMove);
     }
 
     @Test
-    public void capturesAPassMoveWhenTheSelectedMoveCannotBeCaptured() throws IOException {
+    public void marksTheBoard_withAPassMoveWhenTheSelectedMoveCannotBeCaptured_whenTakingATurn() throws IOException {
         bufferedReader.close();
 
-        String move = player.move();
+        player.takeTurn(board);
 
-        assertThat(move).isEqualTo("PASS");
+        verify(board).mark("PASS");
     }
 }
