@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 class Player {
+    private static final String PASS_MOVE = "PASS";
     private final PrintStream printStream;
     private final BufferedReader bufferedReader;
 
@@ -18,7 +19,7 @@ class Player {
         try {
             return bufferedReader.readLine();
         } catch (IOException e) {
-            return null;
+            return PASS_MOVE;
         }
     }
 }

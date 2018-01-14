@@ -12,15 +12,17 @@ public class PlayerTest {
     private Player player;
     private ByteArrayOutputStream outputStream;
     private String selectedMove;
+    private BufferedReader bufferedReader;
 
     @Before
     public void setUp() throws Exception {
         outputStream = new ByteArrayOutputStream();
         selectedMove = "someMove";
         String input = selectedMove + System.lineSeparator();
+        bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(input.getBytes())));
         player = new Player(
             new PrintStream(outputStream),
-            new BufferedReader(new InputStreamReader(new ByteArrayInputStream(input.getBytes()))));
+            bufferedReader);
     }
 
     @Test
@@ -35,5 +37,14 @@ public class PlayerTest {
         String move = player.move();
 
         assertThat(move).isEqualTo(selectedMove);
+    }
+
+    @Test
+    public void capturesAPassMoveWhenTheSelectedMoveCannotBeCaptured() throws IOException {
+        bufferedReader.close();
+
+        String move = player.move();
+
+        assertThat(move).isEqualTo("PASS");
     }
 }
