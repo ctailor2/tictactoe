@@ -20,7 +20,7 @@ class Board {
         printStream.println(grid);
     }
 
-    void mark(String location) {
-        grid = grid.replace(location, "X");
+    void mark(String location, String symbol) {
+        grid = grid.replace(location, symbol);
     }
 }

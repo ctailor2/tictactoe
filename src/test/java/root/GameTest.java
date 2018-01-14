@@ -33,4 +33,11 @@ public class GameTest {
 
         verify(playerTwo).takeTurn(board);
     }
+
+    @Test
+    public void inspectsTheBoardWhenStarted() {
+        game.start();
+
+        verify(board).inspect();
+    }
 }

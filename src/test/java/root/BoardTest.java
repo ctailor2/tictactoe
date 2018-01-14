@@ -32,14 +32,14 @@ public class BoardTest {
     }
 
     @Test
-    public void replacesTheSelectedLocationWithAnXWhenMarked() {
-        board.mark("4");
+    public void replacesTheSelectedLocationWithTheDesiredSymbolWhenMarked() {
+        board.mark("4", "$");
 
         board.inspect();
         assertThat(outputStream.toString()).isEqualTo("" +
             "1|2|3\n" +
             "-----\n" +
-            "X|5|6\n" +
+            "$|5|6\n" +
             "-----\n" +
             "7|8|9\n");
     }

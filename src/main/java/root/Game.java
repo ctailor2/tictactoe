@@ -14,5 +14,6 @@ class Game {
     void start() {
         playerOne.takeTurn(board);
         playerTwo.takeTurn(board);
+        board.inspect();
     }
 }

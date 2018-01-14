@@ -6,10 +6,12 @@ import java.io.PrintStream;
 
 class Player {
     private static final String PASS_MOVE = "PASS";
+    private final String symbol;
     private final PrintStream printStream;
     private final BufferedReader bufferedReader;
 
-    Player(PrintStream printStream, BufferedReader bufferedReader) {
+    Player(String symbol, PrintStream printStream, BufferedReader bufferedReader) {
+        this.symbol = symbol;
         this.printStream = printStream;
         this.bufferedReader = bufferedReader;
     }
@@ -18,9 +20,9 @@ class Player {
         board.inspect();
         printStream.print("Enter a number indicating where you want to mark the board: ");
         try {
-            board.mark(bufferedReader.readLine());
+            board.mark(bufferedReader.readLine(), symbol);
         } catch (IOException e) {
-            board.mark(PASS_MOVE);
+            board.mark(PASS_MOVE, symbol);
         }
     }
 }

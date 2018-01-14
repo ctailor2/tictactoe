@@ -16,14 +16,18 @@ public class PlayerTest {
     private String selectedMove;
     private BufferedReader bufferedReader;
     private Board board;
+    private String symbol;
 
     @Before
     public void setUp() throws Exception {
-        outputStream = new ByteArrayOutputStream();
         selectedMove = "someMove";
         String input = selectedMove + System.lineSeparator();
+        symbol = "@";
+
+        outputStream = new ByteArrayOutputStream();
         bufferedReader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(input.getBytes())));
         player = new Player(
+            symbol,
             new PrintStream(outputStream),
             bufferedReader);
         board = mock(Board.class);
@@ -44,18 +48,18 @@ public class PlayerTest {
     }
 
     @Test
-    public void marksTheBoard_withTheSelectedMove_whenTakingATurn() throws IOException {
+    public void marksTheBoard_atTheSelectedLocation_withThePlayerSymbol_whenTakingATurn() throws IOException {
         player.takeTurn(board);
 
-        verify(board).mark(selectedMove);
+        verify(board).mark(selectedMove, symbol);
     }
 
     @Test
-    public void marksTheBoard_withAPassMoveWhenTheSelectedMoveCannotBeCaptured_whenTakingATurn() throws IOException {
+    public void marksTheBoard_atThePassLocation_withThePlayerSymbol_whenTheSelectedMoveCannotBeCaptured_whenTakingATurn() throws IOException {
         bufferedReader.close();
 
         player.takeTurn(board);
 
-        verify(board).mark("PASS");
+        verify(board).mark("PASS", symbol);
     }
 }
