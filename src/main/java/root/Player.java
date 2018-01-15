@@ -19,10 +19,20 @@ class Player {
     void takeTurn(Board board) {
         board.inspect();
         printStream.print("Enter a number indicating where you want to mark the board: ");
+        String location = selectedLocation();
         try {
-            board.mark(bufferedReader.readLine(), symbol);
+            board.mark(location, symbol);
+        } catch (LocationTakenException e) {
+            printStream.println("Location already taken!");
+            takeTurn(board);
+        }
+    }
+
+    private String selectedLocation() {
+        try {
+            return bufferedReader.readLine();
         } catch (IOException e) {
-            board.mark(PASS_LOCATION, symbol);
+            return PASS_LOCATION;
         }
     }
 }
