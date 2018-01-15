@@ -13,15 +13,15 @@ public class PlayerTest {
 
     private Player player;
     private ByteArrayOutputStream outputStream;
-    private String selectedMove;
+    private String selectedLocation;
     private BufferedReader bufferedReader;
     private Board board;
     private String symbol;
 
     @Before
     public void setUp() throws Exception {
-        selectedMove = "someMove";
-        String input = selectedMove + System.lineSeparator();
+        selectedLocation = "someLocation";
+        String input = selectedLocation + System.lineSeparator();
         symbol = "@";
 
         outputStream = new ByteArrayOutputStream();
@@ -41,7 +41,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void promptsForAMove_whenTakingATurn() {
+    public void promptsForALocation_whenTakingATurn() {
         player.takeTurn(board);
 
         assertThat(outputStream.toString()).isEqualTo("Enter a number indicating where you want to mark the board: ");
@@ -51,11 +51,11 @@ public class PlayerTest {
     public void marksTheBoard_atTheSelectedLocation_withThePlayerSymbol_whenTakingATurn() throws IOException {
         player.takeTurn(board);
 
-        verify(board).mark(selectedMove, symbol);
+        verify(board).mark(selectedLocation, symbol);
     }
 
     @Test
-    public void marksTheBoard_atThePassLocation_withThePlayerSymbol_whenTheSelectedMoveCannotBeCaptured_whenTakingATurn() throws IOException {
+    public void marksTheBoard_atThePassLocation_withThePlayerSymbol_whenTheSelectedLocationCannotBeCaptured_whenTakingATurn() throws IOException {
         bufferedReader.close();
 
         player.takeTurn(board);

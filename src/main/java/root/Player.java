@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 class Player {
-    private static final String PASS_MOVE = "PASS";
+    private static final String PASS_LOCATION = "PASS";
     private final String symbol;
     private final PrintStream printStream;
     private final BufferedReader bufferedReader;
@@ -22,7 +22,7 @@ class Player {
         try {
             board.mark(bufferedReader.readLine(), symbol);
         } catch (IOException e) {
-            board.mark(PASS_MOVE, symbol);
+            board.mark(PASS_LOCATION, symbol);
         }
     }
 }
