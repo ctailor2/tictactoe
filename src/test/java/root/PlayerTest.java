@@ -6,9 +6,7 @@ import org.junit.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class PlayerTest {
 
@@ -54,6 +52,7 @@ public class PlayerTest {
 
         player.takeTurn(board);
 
+        verify(board, times(2)).inspect();
         assertThat(outputStream.toString()).containsSequence(
             "Location already taken!\n",
             "Enter a number indicating where you want to mark the board: "
