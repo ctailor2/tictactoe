@@ -20,9 +20,14 @@ class Player {
         board.inspect();
         printStream.print("Enter a number indicating where you want to mark the board: ");
         try {
-            board.mark(bufferedReader.readLine(), symbol);
-        } catch (IOException e) {
-            board.mark(PASS_LOCATION, symbol);
+            try {
+                board.mark(bufferedReader.readLine(), symbol);
+            } catch (IOException e) {
+                board.mark(PASS_LOCATION, symbol);
+            }
+        } catch (LocationTakenException e) {
+            printStream.println("Location already taken!");
+            printStream.print("Enter a number indicating where you want to mark the board: ");
         }
     }
 }

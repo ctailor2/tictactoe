@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class PlayerTest {
 
@@ -48,14 +47,26 @@ public class PlayerTest {
     }
 
     @Test
-    public void marksTheBoard_atTheSelectedLocation_withThePlayerSymbol_whenTakingATurn() throws IOException {
+    public void marksTheBoard_atTheSelectedLocation_withThePlayerSymbol_whenTakingATurn() throws IOException, LocationTakenException {
         player.takeTurn(board);
 
         verify(board).mark(selectedLocation, symbol);
     }
 
     @Test
-    public void marksTheBoard_atThePassLocation_withThePlayerSymbol_whenTheSelectedLocationCannotBeCaptured_whenTakingATurn() throws IOException {
+    public void promptsForALocation_whenTheSelectedLocationIsTaken_whenTakingATurn() throws LocationTakenException {
+        doThrow(new LocationTakenException()).when(board).mark(selectedLocation, symbol);
+
+        player.takeTurn(board);
+
+        assertThat(outputStream.toString()).containsSequence(
+            "Enter a number indicating where you want to mark the board: ",
+            "Location already taken!\n",
+            "Enter a number indicating where you want to mark the board: ");
+    }
+
+    @Test
+    public void marksTheBoard_atThePassLocation_withThePlayerSymbol_whenTheSelectedLocationCannotBeCaptured_whenTakingATurn() throws IOException, LocationTakenException {
         bufferedReader.close();
 
         player.takeTurn(board);
