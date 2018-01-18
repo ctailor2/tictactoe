@@ -5,7 +5,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.List;
+import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BoardTest {
@@ -61,5 +64,26 @@ public class BoardTest {
     public void fails_whenMarked_atALocationThatIsAlreadyMarked() throws LocationTakenException {
         board.mark("4", "$");
         board.mark("4", "$");
+    }
+
+    @Test
+    public void isNotFilled_whenAnyLocationsAreNotMarked() {
+        boolean filled = board.isFilled();
+
+        assertThat(filled).isFalse();
+    }
+
+    @Test
+    public void isFilled_whenAllLocationsAreMarked() throws LocationTakenException {
+        List<String> identifiers = IntStream.rangeClosed(1, 9)
+            .mapToObj(String::valueOf)
+            .collect(toList());
+        for (String identifier : identifiers) {
+            board.mark(identifier, "$");
+        }
+
+        boolean filled = board.isFilled();
+
+        assertThat(filled).isTrue();
     }
 }

@@ -2,7 +2,9 @@ package root;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
+import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
@@ -17,27 +19,20 @@ public class GameTest {
         board = mock(Board.class);
         playerOne = mock(Player.class);
         playerTwo = mock(Player.class);
-        game = new Game(board, playerOne, playerTwo);
+        game = new Game(board, asList(playerOne, playerTwo));
     }
 
     @Test
-    public void playerOneTakesTheirTurnWithTheBoardWhenStarted() {
+    public void whenStarted_alternatesTurnsBetweenPlayers_beginningWithFirstPlayer_untilTheBoardIsFilled() {
+        InOrder turnOrder = inOrder(playerOne, playerTwo, playerOne);
+        when(board.isFilled()).thenReturn(false, false, false, true);
+
         game.start();
 
-        verify(playerOne).takeTurn(board);
-    }
-
-    @Test
-    public void playerTwoTakesTheirTurnWithTheBoardWhenStarted() {
-        game.start();
-
-        verify(playerTwo).takeTurn(board);
-    }
-
-    @Test
-    public void inspectsTheBoardWhenStarted() {
-        game.start();
-
+        turnOrder.verify(playerOne).takeTurn(board);
+        turnOrder.verify(playerTwo).takeTurn(board);
+        turnOrder.verify(playerOne).takeTurn(board);
+        turnOrder.verifyNoMoreInteractions();
         verify(board).inspect();
     }
 }

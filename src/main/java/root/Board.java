@@ -14,7 +14,8 @@ class Board {
     private static final String ROW_DELIMITER = "\n-----\n";
 
     private final List<Location> locations = IntStream.rangeClosed(1, 9)
-        .mapToObj(number -> new Location(String.valueOf(number)))
+        .mapToObj(String::valueOf)
+        .map(Location::new)
         .collect(toList());
 
     private final PrintStream printStream;
@@ -38,6 +39,10 @@ class Board {
             }
             location.markWith(symbol);
         }
+    }
+
+    boolean isFilled() {
+        return locations.stream().allMatch(Location::isMarked);
     }
 
     private String buildGrid() {
