@@ -11,7 +11,7 @@ import static org.mockito.Mockito.*;
 public class PlayerTest {
 
     private Player player;
-    private ByteArrayOutputStream outputStream;
+    private OutputStream outputStream;
     private String selectedLocation;
     private BufferedReader bufferedReader;
     private Board board;

@@ -1,16 +1,19 @@
 package root;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.ListIterator;
 
 class Game {
     private final Board board;
     private final List<Player> players;
+    private final PrintStream printStream;
     private ListIterator<Player> playersInTurnOrder;
 
-    Game(Board board, List<Player> players) {
+    Game(Board board, List<Player> players, PrintStream printStream) {
         this.board = board;
         this.players = players;
+        this.printStream = printStream;
     }
 
     void start() {
@@ -22,6 +25,7 @@ class Game {
             }
         }
         board.inspect();
+        printStream.println("Game is a draw");
     }
 
     private Player nextPlayer() {

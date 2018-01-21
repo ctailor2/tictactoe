@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BoardTest {
 
     private Board board;
-    private ByteArrayOutputStream outputStream;
+    private OutputStream outputStream;
 
     @Before
     public void setUp() throws Exception {
