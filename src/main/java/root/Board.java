@@ -1,13 +1,13 @@
 package root;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static java.lang.Math.sqrt;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 class Board {
     private static final String COLUMN_DELIMITER = "|";
@@ -41,7 +41,32 @@ class Board {
         }
     }
 
-    boolean isFilled() {
+    boolean hasConclusion() {
+        return isFilled() || anyRowContainsWin();
+    }
+
+    Conclusion conclusion() {
+        if (isFilled()) {
+            return Conclusion.DRAW;
+        } else if (anyRowContainsWin()) {
+            return Conclusion.WIN;
+        } else {
+//            TODO: This method already smells from violating open/closed principle
+//            and the duplication with the hasConclusion conditional logic
+//            and then there's this runtime exception. Clean this up.
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    private boolean anyRowContainsWin() {
+        return Arrays.stream(buildGrid().split(ROW_DELIMITER))
+            .anyMatch(row ->
+                Arrays.stream(row.split("[" + COLUMN_DELIMITER + "]"))
+                    .collect(toSet())
+                    .size() == 1);
+    }
+
+    private boolean isFilled() {
         return locations.stream().allMatch(Location::isMarked);
     }
 
@@ -57,5 +82,9 @@ class Board {
                     .stream()
                     .collect(joining(COLUMN_DELIMITER)))
             .collect(joining(ROW_DELIMITER));
+    }
+
+    enum Conclusion {
+        DRAW, WIN
     }
 }

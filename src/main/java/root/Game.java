@@ -18,21 +18,37 @@ class Game {
 
     void start() {
         startNextRound();
-        while (!board.isFilled()) {
-            nextPlayer().takeTurn(board);
-            if (roundHasEnded()) {
+        while (!board.hasConclusion()) {
+            if (roundIsOver()) {
                 startNextRound();
             }
+            nextPlayer().takeTurn(board);
         }
+        end();
+    }
+
+    private void end() {
         board.inspect();
-        printStream.println("Game is a draw");
+        switch (board.conclusion()) {
+            case DRAW:
+                printStream.println("Game is a draw.");
+                break;
+            case WIN:
+                int playerNumber = currentPlayerNumber();
+                printStream.printf("Player %d wins!\n", playerNumber);
+                break;
+        }
+    }
+
+    private int currentPlayerNumber() {
+        return playersInTurnOrder.nextIndex();
     }
 
     private Player nextPlayer() {
         return playersInTurnOrder.next();
     }
 
-    private boolean roundHasEnded() {
+    private boolean roundIsOver() {
         return !playersInTurnOrder.hasNext();
     }
 

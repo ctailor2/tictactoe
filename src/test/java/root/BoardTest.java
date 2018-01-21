@@ -9,8 +9,11 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static root.Board.Conclusion.DRAW;
+import static root.Board.Conclusion.WIN;
 
 public class BoardTest {
 
@@ -68,14 +71,14 @@ public class BoardTest {
     }
 
     @Test
-    public void isNotFilled_whenAnyLocationsAreNotMarked() {
-        boolean filled = board.isFilled();
+    public void doesNotHaveConclusion_whenAnyLocationsAreNotMarked() {
+        boolean filled = board.hasConclusion();
 
         assertThat(filled).isFalse();
     }
 
     @Test
-    public void isFilled_whenAllLocationsAreMarked() throws LocationTakenException {
+    public void hasConclusion_whenAllLocationsAreMarked() throws LocationTakenException {
         List<String> identifiers = IntStream.rangeClosed(1, 9)
             .mapToObj(String::valueOf)
             .collect(toList());
@@ -83,8 +86,46 @@ public class BoardTest {
             board.mark(identifier, "$");
         }
 
-        boolean filled = board.isFilled();
+        boolean hasConclusion = board.hasConclusion();
 
-        assertThat(filled).isTrue();
+        assertThat(hasConclusion).isTrue();
+    }
+
+    @Test
+    public void hasConclusion_whenAllLocationsInARowHaveTheSameMark() throws LocationTakenException {
+        List<String> identifiers = asList("1", "2", "3");
+        for (String identifier : identifiers) {
+            board.mark(identifier, "$");
+        }
+
+        boolean hasConclusion = board.hasConclusion();
+
+        assertThat(hasConclusion).isTrue();
+    }
+
+    @Test
+    public void concludesADraw_whenAllLocationsAreMarked() throws LocationTakenException {
+        List<String> identifiers = IntStream.rangeClosed(1, 9)
+            .mapToObj(String::valueOf)
+            .collect(toList());
+        for (String identifier : identifiers) {
+            board.mark(identifier, "$");
+        }
+
+        Board.Conclusion conclusion = board.conclusion();
+
+        assertThat(conclusion).isEqualTo(DRAW);
+    }
+
+    @Test
+    public void concludesAWin_whenAllLocationsInARowHaveTheSameMark() throws LocationTakenException {
+        List<String> identifiers = asList("4", "5", "6");
+        for (String identifier : identifiers) {
+            board.mark(identifier, "$");
+        }
+
+        Board.Conclusion conclusion = board.conclusion();
+
+        assertThat(conclusion).isEqualTo(WIN);
     }
 }

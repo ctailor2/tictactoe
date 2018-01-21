@@ -11,6 +11,8 @@ import java.io.PrintStream;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static root.Board.Conclusion.DRAW;
+import static root.Board.Conclusion.WIN;
 
 public class GameTest {
 
@@ -33,9 +35,10 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_alternatesTurnsBetweenPlayers_beginningWithFirstPlayer_untilTheBoardIsFilled() {
+    public void whenStarted_alternatesTurnsBetweenPlayers_beginningWithFirstPlayer_untilTheBoardHasAConclusion() {
         InOrder turnOrder = inOrder(playerOne, playerTwo, playerOne);
-        when(board.isFilled()).thenReturn(false, false, false, true);
+        when(board.hasConclusion()).thenReturn(false, false, false, true);
+        when(board.conclusion()).thenReturn(DRAW);
 
         game.start();
 
@@ -46,12 +49,32 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_inspectsTheBoard_onceFilled_andDeclaresTheGameADraw() {
-        when(board.isFilled()).thenReturn(true);
+    public void whenStarted_inspectsTheBoard_onceItHasAConclusion() {
+        when(board.hasConclusion()).thenReturn(true);
+        when(board.conclusion()).thenReturn(DRAW);
 
         game.start();
 
         verify(board).inspect();
-        assertThat(outputStream.toString()).isEqualTo("Game is a draw\n");
+    }
+
+    @Test
+    public void whenStarted_declaresTheGameADraw_whenTheBoardConclusionIsADraw() {
+        when(board.hasConclusion()).thenReturn(true);
+        when(board.conclusion()).thenReturn(DRAW);
+
+        game.start();
+
+        assertThat(outputStream.toString()).isEqualTo("Game is a draw.\n");
+    }
+
+    @Test
+    public void whenStarted_declaresThePlayerWithTheLastTurnAsTheWinner_whenTheBoardConclusionIsAWin() {
+        when(board.hasConclusion()).thenReturn(false, false, true);
+        when(board.conclusion()).thenReturn(WIN);
+
+        game.start();
+
+        assertThat(outputStream.toString()).isEqualTo("Player 2 wins!\n");
     }
 }
