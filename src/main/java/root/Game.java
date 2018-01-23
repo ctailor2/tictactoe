@@ -4,6 +4,8 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.ListIterator;
 
+import static root.Board.Result.INCONCLUSIVE;
+
 class Game {
     private final Board board;
     private final List<Player> players;
@@ -18,18 +20,20 @@ class Game {
 
     void start() {
         startNextRound();
-        while (!board.hasConclusion()) {
+        Board.Result result;
+        do {
             if (roundIsOver()) {
                 startNextRound();
             }
             nextPlayer().takeTurn(board);
-        }
+            result = board.result();
+        } while (result.equals(INCONCLUSIVE));
         end();
     }
 
     private void end() {
         board.inspect();
-        switch (board.conclusion()) {
+        switch (board.result()) {
             case DRAW:
                 printStream.println("Game is a draw.");
                 break;

@@ -41,20 +41,14 @@ class Board {
         }
     }
 
-    boolean hasConclusion() {
-        return isFilled() || anyRowContainsWin();
-    }
-
-    Conclusion conclusion() {
+    Result result() {
+//      TODO: This method smells from violating open/closed principle
         if (isFilled()) {
-            return Conclusion.DRAW;
+            return Result.DRAW;
         } else if (anyRowContainsWin()) {
-            return Conclusion.WIN;
+            return Result.WIN;
         } else {
-//            TODO: This method already smells from violating open/closed principle
-//            and the duplication with the hasConclusion conditional logic
-//            and then there's this runtime exception. Clean this up.
-            throw new UnsupportedOperationException();
+            return Result.INCONCLUSIVE;
         }
     }
 
@@ -84,7 +78,9 @@ class Board {
             .collect(joining(ROW_DELIMITER));
     }
 
-    enum Conclusion {
-        DRAW, WIN
+    enum Result {
+        INCONCLUSIVE,
+        DRAW,
+        WIN
     }
 }

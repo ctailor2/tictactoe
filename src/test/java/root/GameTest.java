@@ -11,8 +11,7 @@ import java.io.PrintStream;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import static root.Board.Conclusion.DRAW;
-import static root.Board.Conclusion.WIN;
+import static root.Board.Result.*;
 
 public class GameTest {
 
@@ -35,10 +34,9 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_alternatesTurnsBetweenPlayers_beginningWithFirstPlayer_untilTheBoardHasAConclusion() {
+    public void whenStarted_alternatesTurnsBetweenPlayers_beginningWithFirstPlayer_untilTheBoardResultIsConclusive() {
         InOrder turnOrder = inOrder(playerOne, playerTwo, playerOne);
-        when(board.hasConclusion()).thenReturn(false, false, false, true);
-        when(board.conclusion()).thenReturn(DRAW);
+        when(board.result()).thenReturn(INCONCLUSIVE, INCONCLUSIVE, DRAW);
 
         game.start();
 
@@ -49,9 +47,8 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_inspectsTheBoard_onceItHasAConclusion() {
-        when(board.hasConclusion()).thenReturn(true);
-        when(board.conclusion()).thenReturn(DRAW);
+    public void whenStarted_inspectsTheBoard_onceItHasAConclusiveResult() {
+        when(board.result()).thenReturn(DRAW);
 
         game.start();
 
@@ -59,9 +56,8 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_declaresTheGameADraw_whenTheBoardConclusionIsADraw() {
-        when(board.hasConclusion()).thenReturn(true);
-        when(board.conclusion()).thenReturn(DRAW);
+    public void whenStarted_declaresTheGameADraw_whenTheBoardResultIsADraw() {
+        when(board.result()).thenReturn(DRAW);
 
         game.start();
 
@@ -69,9 +65,8 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_declaresThePlayerWithTheLastTurnAsTheWinner_whenTheBoardConclusionIsAWin() {
-        when(board.hasConclusion()).thenReturn(false, false, true);
-        when(board.conclusion()).thenReturn(WIN);
+    public void whenStarted_declaresThePlayerWithTheLastTurnAsTheWinner_whenTheBoardResultIsAWin() {
+        when(board.result()).thenReturn(INCONCLUSIVE, WIN);
 
         game.start();
 
