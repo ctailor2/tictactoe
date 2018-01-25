@@ -49,6 +49,10 @@ class Board {
         }
     }
 
+    boolean isFilled() {
+        return locations.stream().allMatch(Location::isMarked);
+    }
+
     List<List<Location>> rows() {
         return locations.stream()
             .collect(groupingBy(Location::getRowNumber))
@@ -58,7 +62,12 @@ class Board {
             .collect(toList());
     }
 
-    boolean isFilled() {
-        return locations.stream().allMatch(Location::isMarked);
+    List<List<Location>> columns() {
+        return locations.stream()
+            .collect(groupingBy(Location::getColumnNumber))
+            .entrySet()
+            .stream()
+            .map(Map.Entry::getValue)
+            .collect(toList());
     }
 }

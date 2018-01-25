@@ -66,12 +66,23 @@ public class BoardTest {
     }
 
     @Test
-    public void rowsContainHorizontalGroupOfLocations() {
+    public void rowsContainHorizontalGroupsOfLocations() {
         List<List<Location>> rows = board.rows();
 
         assertThat(rows).hasSize(3);
         assertThat(rows.get(0)).extracting(Location::display).containsExactly("1", "2", "3");
         assertThat(rows.get(1)).extracting(Location::display).containsExactly("4", "5", "6");
         assertThat(rows.get(2)).extracting(Location::display).containsExactly("7", "8", "9");
+    }
+
+    @Test
+    public void columnsContainVerticalGroupsOfLocations() {
+        List<List<Location>> columns = board.columns();
+
+        assertThat(columns).hasSize(3);
+        
+        assertThat(columns.get(0)).extracting(Location::display).containsExactly("1", "4", "7");
+        assertThat(columns.get(1)).extracting(Location::display).containsExactly("2", "5", "8");
+        assertThat(columns.get(2)).extracting(Location::display).containsExactly("3", "6", "9");
     }
 }

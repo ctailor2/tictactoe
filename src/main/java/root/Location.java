@@ -3,10 +3,12 @@ package root;
 class Location {
     private String identifier;
     private String mark;
-    private int rowNumber;
+    private final int rowNumber;
+    private final int columnNumber;
 
     Location(int rowNumber, int columnNumber) {
         this.rowNumber = rowNumber;
+        this.columnNumber = columnNumber;
         identifier = String.valueOf((rowNumber - 1) * 3 + columnNumber);
         mark = "";
     }
@@ -29,5 +31,9 @@ class Location {
 
     int getRowNumber() {
         return rowNumber;
+    }
+
+    int getColumnNumber() {
+        return columnNumber;
     }
 }

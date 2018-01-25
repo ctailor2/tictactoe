@@ -1,6 +1,8 @@
 package root;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -16,7 +18,10 @@ class Referee {
     }
 
     private boolean aWinPatternExists(Board board) {
-        return board.rows().stream()
+        ArrayList<List<Location>> winPatterns = new ArrayList<>();
+        winPatterns.addAll(board.rows());
+        winPatterns.addAll(board.columns());
+        return winPatterns.stream()
             .map(locations -> locations.stream().map(Location::display).collect(toList()))
             .anyMatch(row -> new HashSet<>(row).size() == 1);
     }
