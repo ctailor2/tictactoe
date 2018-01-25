@@ -1,11 +1,13 @@
 package root;
 
 class Location {
-    private final String identifier;
+    private String identifier;
     private String mark;
+    private int rowNumber;
 
-    Location(String identifier) {
-        this.identifier = identifier;
+    Location(int rowNumber, int columnNumber) {
+        this.rowNumber = rowNumber;
+        identifier = String.valueOf((rowNumber - 1) * 3 + columnNumber);
         mark = "";
     }
 
@@ -23,5 +25,9 @@ class Location {
 
     String display() {
         return isMarked() ? mark : identifier;
+    }
+
+    int getRowNumber() {
+        return rowNumber;
     }
 }

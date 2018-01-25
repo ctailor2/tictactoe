@@ -4,15 +4,17 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.ListIterator;
 
-import static root.Board.Result.INCONCLUSIVE;
+import static root.Game.Result.INCONCLUSIVE;
 
 class Game {
+    private final Referee referee;
     private final Board board;
     private final List<Player> players;
     private final PrintStream printStream;
     private ListIterator<Player> playersInTurnOrder;
 
-    Game(Board board, List<Player> players, PrintStream printStream) {
+    Game(Referee referee, Board board, List<Player> players, PrintStream printStream) {
+        this.referee = referee;
         this.board = board;
         this.players = players;
         this.printStream = printStream;
@@ -20,20 +22,18 @@ class Game {
 
     void start() {
         startNextRound();
-        Board.Result result;
         do {
             if (roundIsOver()) {
                 startNextRound();
             }
             nextPlayer().takeTurn(board);
-            result = board.result();
-        } while (result.equals(INCONCLUSIVE));
+        } while (referee.determineResult(board).equals(INCONCLUSIVE));
         end();
     }
 
     private void end() {
         board.inspect();
-        switch (board.result()) {
+        switch (referee.determineResult(board)) {
             case DRAW:
                 printStream.println("Game is a draw.");
                 break;
@@ -58,5 +58,11 @@ class Game {
 
     private void startNextRound() {
         playersInTurnOrder = players.listIterator();
+    }
+
+    enum Result {
+        INCONCLUSIVE,
+        DRAW,
+        WIN
     }
 }

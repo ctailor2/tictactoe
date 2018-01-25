@@ -7,12 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.List;
-import java.util.stream.IntStream;
 
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static root.Board.Result.*;
 
 public class BoardTest {
 
@@ -70,35 +66,12 @@ public class BoardTest {
     }
 
     @Test
-    public void hasAnInconclusiveResult_whenNoLocationsAreMarked() {
-        Board.Result result = board.result();
+    public void rowsContainHorizontalGroupOfLocations() {
+        List<List<Location>> rows = board.rows();
 
-        assertThat(result).isEqualTo(INCONCLUSIVE);
-    }
-
-    @Test
-    public void resultsInADraw_whenAllLocationsAreMarked() throws LocationTakenException {
-        List<String> identifiers = IntStream.rangeClosed(1, 9)
-            .mapToObj(String::valueOf)
-            .collect(toList());
-        for (String identifier : identifiers) {
-            board.mark(identifier, "$");
-        }
-
-        Board.Result result = board.result();
-
-        assertThat(result).isEqualTo(DRAW);
-    }
-
-    @Test
-    public void resultsInAWin_whenAllLocationsInARowHaveTheSameMark() throws LocationTakenException {
-        List<String> identifiers = asList("4", "5", "6");
-        for (String identifier : identifiers) {
-            board.mark(identifier, "$");
-        }
-
-        Board.Result result = board.result();
-
-        assertThat(result).isEqualTo(WIN);
+        assertThat(rows).hasSize(3);
+        assertThat(rows.get(0)).extracting(Location::display).containsExactly("1", "2", "3");
+        assertThat(rows.get(1)).extracting(Location::display).containsExactly("4", "5", "6");
+        assertThat(rows.get(2)).extracting(Location::display).containsExactly("7", "8", "9");
     }
 }

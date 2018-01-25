@@ -1,31 +1,39 @@
 package root;
 
 import java.io.PrintStream;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
-import static java.lang.Math.sqrt;
 import static java.util.stream.Collectors.*;
 
 class Board {
     private static final String COLUMN_DELIMITER = "|";
     private static final String ROW_DELIMITER = "\n-----\n";
 
-    private final List<Location> locations = IntStream.rangeClosed(1, 9)
-        .mapToObj(String::valueOf)
-        .map(Location::new)
-        .collect(toList());
+    private final List<Location> locations = new ArrayList<>();
 
     private final PrintStream printStream;
 
     Board(PrintStream printStream) {
         this.printStream = printStream;
+
+        IntStream.rangeClosed(1, 3)
+            .forEachOrdered(rowNumber ->
+                IntStream.rangeClosed(1, 3)
+                    .forEachOrdered(columnNumber ->
+                        locations.add(new Location(rowNumber, columnNumber))));
     }
 
     void inspect() {
-        printStream.println(buildGrid());
+        String grid = rows().stream()
+            .map(columns -> columns.stream()
+                .map(Location::display)
+                .collect(joining(COLUMN_DELIMITER)))
+            .collect(joining(ROW_DELIMITER));
+        printStream.println(grid);
     }
 
     void mark(String locationIdentifier, String symbol) throws LocationTakenException {
@@ -41,46 +49,16 @@ class Board {
         }
     }
 
-    Result result() {
-//      TODO: This method smells from violating open/closed principle
-        if (isFilled()) {
-            return Result.DRAW;
-        } else if (anyRowContainsWin()) {
-            return Result.WIN;
-        } else {
-            return Result.INCONCLUSIVE;
-        }
+    List<List<Location>> rows() {
+        return locations.stream()
+            .collect(groupingBy(Location::getRowNumber))
+            .entrySet()
+            .stream()
+            .map(Map.Entry::getValue)
+            .collect(toList());
     }
 
-    private boolean anyRowContainsWin() {
-        return Arrays.stream(buildGrid().split(ROW_DELIMITER))
-            .anyMatch(row ->
-                Arrays.stream(row.split("[" + COLUMN_DELIMITER + "]"))
-                    .collect(toSet())
-                    .size() == 1);
-    }
-
-    private boolean isFilled() {
+    boolean isFilled() {
         return locations.stream().allMatch(Location::isMarked);
-    }
-
-    private String buildGrid() {
-        int gridSize = (int) sqrt(locations.size());
-        return IntStream.rangeClosed(1, locations.size())
-            .filter(elementNumber -> elementNumber % gridSize == 0)
-            .mapToObj(endOfRowElementNumber ->
-                locations.stream()
-                    .map(Location::display)
-                    .collect(toList())
-                    .subList(endOfRowElementNumber - gridSize, endOfRowElementNumber)
-                    .stream()
-                    .collect(joining(COLUMN_DELIMITER)))
-            .collect(joining(ROW_DELIMITER));
-    }
-
-    enum Result {
-        INCONCLUSIVE,
-        DRAW,
-        WIN
     }
 }
