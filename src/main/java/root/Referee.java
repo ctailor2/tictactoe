@@ -21,6 +21,7 @@ class Referee {
         ArrayList<List<Location>> winPatterns = new ArrayList<>();
         winPatterns.addAll(board.rows());
         winPatterns.addAll(board.columns());
+        winPatterns.addAll(board.diagonals());
         return winPatterns.stream()
             .map(locations -> locations.stream().map(Location::display).collect(toList()))
             .anyMatch(row -> new HashSet<>(row).size() == 1);

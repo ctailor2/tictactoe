@@ -59,6 +59,17 @@ public class RefereeTest {
     }
 
     @Test
+    public void resultsInAWin_whenAllLocationsInADiagonalHaveTheSameMark() {
+        Location location = new Location(1, 1);
+        location.markWith("X");
+        when(board.diagonals()).thenReturn(singletonList(singletonList(location)));
+
+        Game.Result result = referee.determineResult(board);
+
+        assertThat(result).isEqualTo(WIN);
+    }
+
+    @Test
     public void resultsInAWin_whenAWinPatternExists_andTheBoardIsFilled() {
         Location location = new Location(1, 1);
         location.markWith("X");

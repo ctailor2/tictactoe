@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.*;
 
 class Board {
@@ -16,13 +17,15 @@ class Board {
     private final List<Location> locations = new ArrayList<>();
 
     private final PrintStream printStream;
+    private final int gridSize;
 
-    Board(PrintStream printStream) {
+    Board(PrintStream printStream, int gridSize) {
         this.printStream = printStream;
+        this.gridSize = gridSize;
 
-        IntStream.rangeClosed(1, 3)
+        IntStream.rangeClosed(1, gridSize)
             .forEachOrdered(rowNumber ->
-                IntStream.rangeClosed(1, 3)
+                IntStream.rangeClosed(1, gridSize)
                     .forEachOrdered(columnNumber ->
                         locations.add(new Location(rowNumber, columnNumber))));
     }
@@ -69,5 +72,20 @@ class Board {
             .stream()
             .map(Map.Entry::getValue)
             .collect(toList());
+    }
+
+    List<List<Location>> diagonals() {
+        int lastRowIndex = gridSize - 1;
+
+        ArrayList<Location> firstDiagonal = new ArrayList<>();
+        ArrayList<Location> secondDiagonal = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex <= lastRowIndex; rowIndex++) {
+            List<Location> row = rows().get(rowIndex);
+
+            firstDiagonal.add(row.get(rowIndex));
+            secondDiagonal.add(row.get(lastRowIndex - rowIndex));
+        }
+
+        return asList(firstDiagonal, secondDiagonal);
     }
 }

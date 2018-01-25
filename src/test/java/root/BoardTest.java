@@ -18,7 +18,7 @@ public class BoardTest {
     @Before
     public void setUp() throws Exception {
         outputStream = new ByteArrayOutputStream();
-        board = new Board(new PrintStream(outputStream));
+        board = new Board(new PrintStream(outputStream), 3);
     }
 
     @Test
@@ -80,9 +80,18 @@ public class BoardTest {
         List<List<Location>> columns = board.columns();
 
         assertThat(columns).hasSize(3);
-        
         assertThat(columns.get(0)).extracting(Location::display).containsExactly("1", "4", "7");
         assertThat(columns.get(1)).extracting(Location::display).containsExactly("2", "5", "8");
         assertThat(columns.get(2)).extracting(Location::display).containsExactly("3", "6", "9");
+    }
+
+    @Test
+    public void diagonalsContainDiagonalGroupsOfLocations() {
+        List<List<Location>> diagonals = board.diagonals();
+
+        assertThat(diagonals).hasSize(2);
+
+        assertThat(diagonals.get(0)).extracting(Location::display).containsExactly("1", "5", "9");
+        assertThat(diagonals.get(1)).extracting(Location::display).containsExactly("3", "5", "7");
     }
 }
