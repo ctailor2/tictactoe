@@ -22,6 +22,22 @@ public class BoardTest {
     }
 
     @Test
+    public void outputsItsGrid_whenInspected_withGridSize4() {
+        Board board = new Board(new PrintStream(outputStream), 4);
+
+        board.inspect();
+        assertThat(outputStream.toString()).isEqualTo("" +
+            " 1| 2| 3| 4\n" +
+            "-----------\n" +
+            " 5| 6| 7| 8\n" +
+            "-----------\n" +
+            " 9|10|11|12\n" +
+            "-----------\n" +
+            "13|14|15|16\n"
+        );
+    }
+
+    @Test
     public void outputsItsGrid_whenInspected() {
         board.inspect();
 

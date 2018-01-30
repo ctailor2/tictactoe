@@ -1,10 +1,7 @@
 package root;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
@@ -12,7 +9,6 @@ import static java.util.stream.Collectors.*;
 
 class Board {
     private static final String COLUMN_DELIMITER = "|";
-    private static final String ROW_DELIMITER = "\n-----\n";
 
     private final List<Location> locations = new ArrayList<>();
 
@@ -27,15 +23,26 @@ class Board {
             .forEachOrdered(rowNumber ->
                 IntStream.rangeClosed(1, gridSize)
                     .forEachOrdered(columnNumber ->
-                        locations.add(new Location(rowNumber, columnNumber))));
+                        locations.add(new Location(rowNumber, columnNumber, gridSize))));
     }
 
     void inspect() {
+        int numberOfColumnsSeparators = gridSize - 1;
+        int cellWidth = String.valueOf(locations.size()).length();
+        int lengthOfRowDelimiter = cellWidth * gridSize + numberOfColumnsSeparators;
+        char[] row = new char[lengthOfRowDelimiter];
+        Arrays.fill(row, '-');
+        String rowDelimiter = "\n" +
+            String.valueOf(row) +
+            "\n";
         String grid = rows().stream()
             .map(columns -> columns.stream()
-                .map(Location::display)
+                .map(location -> {
+                    String displayValue = location.display();
+                    return String.format("%1$" + cellWidth + "s", displayValue);
+                })
                 .collect(joining(COLUMN_DELIMITER)))
-            .collect(joining(ROW_DELIMITER));
+            .collect(joining(rowDelimiter));
         printStream.println(grid);
     }
 
