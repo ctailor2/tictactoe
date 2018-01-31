@@ -6,10 +6,10 @@ class Location {
     private final int rowNumber;
     private final int columnNumber;
 
-    Location(int rowNumber, int columnNumber, int gridSize) {
-        this.columnNumber = columnNumber;
+    Location(String identifier, int rowNumber, int columnNumber) {
+        this.identifier = identifier;
         this.rowNumber = rowNumber;
-        identifier = String.valueOf((rowNumber - 1) * gridSize + columnNumber);
+        this.columnNumber = columnNumber;
         mark = "";
     }
 

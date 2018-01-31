@@ -22,13 +22,19 @@ class Board {
         IntStream.rangeClosed(1, gridSize)
             .forEachOrdered(rowNumber ->
                 IntStream.rangeClosed(1, gridSize)
-                    .forEachOrdered(columnNumber ->
-                        locations.add(new Location(rowNumber, columnNumber, gridSize))));
+                    .forEachOrdered(columnNumber -> {
+                        int nextIdentifier = locations.size() + 1;
+                        locations.add(
+                            new Location(
+                                String.valueOf(nextIdentifier),
+                                rowNumber,
+                                columnNumber));
+                    }));
     }
 
     void inspect() {
-        int numberOfColumnsSeparators = gridSize - 1;
         int cellWidth = String.valueOf(locations.size()).length();
+        int numberOfColumnsSeparators = gridSize - 1;
         int lengthOfRowDelimiter = cellWidth * gridSize + numberOfColumnsSeparators;
         char[] row = new char[lengthOfRowDelimiter];
         Arrays.fill(row, '-');
@@ -37,10 +43,8 @@ class Board {
             "\n";
         String grid = rows().stream()
             .map(columns -> columns.stream()
-                .map(location -> {
-                    String displayValue = location.display();
-                    return String.format("%1$" + cellWidth + "s", displayValue);
-                })
+                .map(location ->
+                    String.format("%1$" + cellWidth + "s", location.display()))
                 .collect(joining(COLUMN_DELIMITER)))
             .collect(joining(rowDelimiter));
         printStream.println(grid);

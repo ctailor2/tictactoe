@@ -38,7 +38,7 @@ public class RefereeTest {
 
     @Test
     public void resultsInAWin_whenAllLocationsInARowHaveTheSameMark() throws LocationTakenException {
-        Location location = new Location(1, 1, 1);
+        Location location = new Location("1", 1, 1);
         location.markWith("X");
         when(board.rows()).thenReturn(singletonList(singletonList(location)));
 
@@ -49,7 +49,7 @@ public class RefereeTest {
 
     @Test
     public void resultsInAWin_whenAllLocationsInAColumnHaveTheSameMark() {
-        Location location = new Location(1, 1, 1);
+        Location location = new Location("1", 1, 1);
         location.markWith("X");
         when(board.columns()).thenReturn(singletonList(singletonList(location)));
 
@@ -60,7 +60,7 @@ public class RefereeTest {
 
     @Test
     public void resultsInAWin_whenAllLocationsInADiagonalHaveTheSameMark() {
-        Location location = new Location(1, 1, 1);
+        Location location = new Location("1", 1, 1);
         location.markWith("X");
         when(board.diagonals()).thenReturn(singletonList(singletonList(location)));
 
@@ -71,7 +71,7 @@ public class RefereeTest {
 
     @Test
     public void resultsInAWin_whenAWinPatternExists_andTheBoardIsFilled() {
-        Location location = new Location(1, 1, 1);
+        Location location = new Location("1", 1, 1);
         location.markWith("X");
         when(board.rows()).thenReturn(singletonList(singletonList(location)));
         when(board.isFilled()).thenReturn(true);
