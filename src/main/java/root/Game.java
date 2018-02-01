@@ -32,7 +32,7 @@ class Game {
     }
 
     private void end() {
-        board.inspect();
+        printStream.println(board.grid());
         switch (referee.determineResult(board)) {
             case DRAW:
                 printStream.println("Game is a draw.");

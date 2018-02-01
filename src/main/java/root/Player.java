@@ -17,7 +17,7 @@ class Player {
     }
 
     void takeTurn(Board board) {
-        board.inspect();
+        printStream.println(board.grid());
         printStream.print("Enter a number indicating where you want to mark the board: ");
         String location = selectedLocation();
         try {

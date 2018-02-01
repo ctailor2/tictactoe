@@ -16,6 +16,7 @@ public class PlayerTest {
     private BufferedReader bufferedReader;
     private Board board;
     private String symbol;
+    private String boardGrid;
 
     @Before
     public void setUp() throws Exception {
@@ -29,21 +30,24 @@ public class PlayerTest {
             symbol,
             new PrintStream(outputStream),
             bufferedReader);
+
         board = mock(Board.class);
+        boardGrid = "this is a board grid";
+        when(board.grid()).thenReturn(boardGrid);
     }
 
     @Test
-    public void inspectsTheBoard_whenTakingATurn() {
+    public void viewsTheBoardGrid_whenTakingATurn() {
         player.takeTurn(board);
 
-        verify(board).inspect();
+        assertThat(outputStream.toString()).contains(boardGrid + "\n");
     }
 
     @Test
     public void promptsForALocation_whenTakingATurn() {
         player.takeTurn(board);
 
-        assertThat(outputStream.toString()).isEqualTo("Enter a number indicating where you want to mark the board: ");
+        assertThat(outputStream.toString()).contains("Enter a number indicating where you want to mark the board: ");
     }
 
     @Test
@@ -52,8 +56,7 @@ public class PlayerTest {
 
         player.takeTurn(board);
 
-        verify(board, times(2)).inspect();
-        assertThat(outputStream.toString()).containsSequence(
+        assertThat(outputStream.toString()).containsSubsequence(
             "Location already taken!\n",
             "Enter a number indicating where you want to mark the board: "
         );

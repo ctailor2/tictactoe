@@ -50,12 +50,14 @@ public class GameTest {
     }
 
     @Test
-    public void whenStarted_inspectsTheBoard_onceTheRefereeDeterminesAConclusiveResult() {
+    public void whenStarted_showsTheBoard_onceTheRefereeDeterminesAConclusiveResult() {
         when(referee.determineResult(board)).thenReturn(DRAW);
+        String boardGrid = "this is a board grid";
+        when(board.grid()).thenReturn(boardGrid);
 
         game.start();
 
-        verify(board).inspect();
+        assertThat(outputStream.toString()).contains(boardGrid + "\n");
     }
 
     @Test
@@ -64,7 +66,7 @@ public class GameTest {
 
         game.start();
 
-        assertThat(outputStream.toString()).isEqualTo("Game is a draw.\n");
+        assertThat(outputStream.toString()).contains("Game is a draw.\n");
     }
 
     @Test
@@ -73,6 +75,6 @@ public class GameTest {
 
         game.start();
 
-        assertThat(outputStream.toString()).isEqualTo("Player 2 wins!\n");
+        assertThat(outputStream.toString()).contains("Player 2 wins!\n");
     }
 }

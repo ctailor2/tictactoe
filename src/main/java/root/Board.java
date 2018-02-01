@@ -1,6 +1,5 @@
 package root;
 
-import java.io.PrintStream;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -12,28 +11,26 @@ class Board {
 
     private final List<Location> locations = new ArrayList<>();
 
-    private final PrintStream printStream;
     private final int gridSize;
 
-    Board(PrintStream printStream, int gridSize) {
-        this.printStream = printStream;
+    Board(int gridSize) {
         this.gridSize = gridSize;
 
         IntStream.rangeClosed(1, gridSize)
             .forEachOrdered(rowNumber ->
                 IntStream.rangeClosed(1, gridSize)
                     .forEachOrdered(columnNumber -> {
-                        int nextIdentifier = locations.size() + 1;
+                        String nextIdentifier = String.valueOf(locations.size() + 1);
                         locations.add(
                             new Location(
-                                String.valueOf(nextIdentifier),
+                                nextIdentifier,
                                 rowNumber,
                                 columnNumber));
                     }));
     }
 
-    void inspect() {
-        int cellWidth = String.valueOf(locations.size()).length();
+    String grid() {
+        int cellWidth = String.valueOf(gridSize * gridSize).length();
         int numberOfColumnsSeparators = gridSize - 1;
         int lengthOfRowDelimiter = cellWidth * gridSize + numberOfColumnsSeparators;
         char[] row = new char[lengthOfRowDelimiter];
@@ -41,13 +38,12 @@ class Board {
         String rowDelimiter = "\n" +
             String.valueOf(row) +
             "\n";
-        String grid = rows().stream()
+        return rows().stream()
             .map(columns -> columns.stream()
                 .map(location ->
                     String.format("%1$" + cellWidth + "s", location.display()))
                 .collect(joining(COLUMN_DELIMITER)))
             .collect(joining(rowDelimiter));
-        printStream.println(grid);
     }
 
     void mark(String locationIdentifier, String symbol) throws LocationTakenException {
